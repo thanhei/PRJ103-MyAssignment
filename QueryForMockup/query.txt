@@ -1,0 +1,15 @@
+
+select * from Lecture where id='sonnt5'
+
+select s.SessionID,ts.sid,r.RoomName,s.Date,g.Group_Code,l.LectureName,ts.time_start,ts.time_end from Session s left join [Group] g on s.GroupID=g.Id
+                        left join Lecture l on g.LectureID=l.LectureID
+                        left join Room r on s.RoomID=r.RoomID 
+						left join TimeSlot ts on s.SlotID=ts.sid 
+						where l.LectureID='sonnt5'
+
+
+
+
+select a.rollnumer,s.Name,a.sessionId,a.status,g.Group_Code,g.LectureID from Attendance a left join Student s on a.rollnumer=s.RollNumber
+						 left join Session se on a.sessionId=se.SessionID
+						 left join [Group] g on se.GroupID=g.Id
