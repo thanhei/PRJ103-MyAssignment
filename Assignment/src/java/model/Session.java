@@ -5,6 +5,7 @@
 package model;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 /**
  *
@@ -13,10 +14,11 @@ import java.sql.Date;
 public class Session {
     private int sessionid;
     private int slotid;
-    private int roomid;
+    private String roomName;
     private String lectureid;
-    private String groupid;
-    private Date date;
+    private Group Group;
+    private String SubjectCode;
+    private LocalDate date;
 
     public Session() {
     }
@@ -46,29 +48,43 @@ public class Session {
         this.slotid = slotid;
     }
 
-    public int getRoomid() {
-        return roomid;
+    public String getRoomName() {
+        return roomName;
     }
 
-    public void setRoomid(int roomid) {
-        this.roomid = roomid;
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
     }
 
-    public String getGroupid() {
-        return groupid;
+    public Group getGroup() {
+        return Group;
     }
 
-    public void setGroupid(String groupid) {
-        this.groupid = groupid;
+    public void setGroup(Group Group) {
+        this.Group = Group;
     }
 
-    public Date getDate() {
+  
+
+    
+
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public String getSubjectCode() {
+        return SubjectCode;
+    }
+
+    public void setSubjectCode(String SubjectCode) {
+        this.SubjectCode = SubjectCode;
+    }
+    
+    
     
     
     

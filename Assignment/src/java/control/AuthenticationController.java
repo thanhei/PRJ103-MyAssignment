@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.Account;
 
 /**
@@ -63,12 +64,16 @@ public class AuthenticationController extends HttpServlet {
         Account account = db.getStudentAccount(user, pass);
         if(account!=null)
         {
-            response.getWriter().println("hello "+ account.getUsername());
+            HttpSession session=request.getSession();
+            session.setAttribute("account", account);
+            response.sendRedirect("lecture/schedule");
         }
         else
         {
-            response.getWriter().println("login failed");
+            request.setAttribute("massage", "Login Failed");  
+            request.getRequestDispatcher("view/account/login.jsp").forward(request, response);
         }
+         
     }
 
     /** 

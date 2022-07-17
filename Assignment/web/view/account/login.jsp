@@ -44,6 +44,7 @@
             <div class="login-page">           
                 <div class="form">                 
                   <form class="login-form">
+                      ${massage}
                     <input type="text" name="user" placeholder="username"/>
                     <input type="password" name="pass" placeholder="password"/>
                     <button>login</button>
@@ -51,6 +52,7 @@
                 </div>
               </div>
         </form>
+        
 
         </div>
 

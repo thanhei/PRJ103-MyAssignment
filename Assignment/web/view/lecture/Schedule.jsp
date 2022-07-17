@@ -12,7 +12,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="./style.css/timetable.css">
+    <link rel="stylesheet" href="../css/schedule.css"/>
      <script> 
             function myfunction()
             {
@@ -31,7 +31,6 @@
             }
            
         </script>
-    
 </head>
 
 <body>
@@ -72,7 +71,7 @@
         </select>
         </br>
 
-        Lecture <input type="text" name="" id="" value="sonnt5">
+        Lecture <input type="text" name="" id="" value="${sessionScope.account.getUsername()}">
 
     </div>
     </br>
@@ -129,112 +128,28 @@
                     </c:forEach>
                       </c:forEach> 
                 </tr>
-            <tr>
-                <td>slot1</td>
-                <td>${requestScope.today2}</td>
-                <td>JPD123-View Materials </br>
-                    at DE-C201 </br>
-                    (absent)</td>
-                <td>PRJ301-View Materials</br>
-                    at DE-C201</br>
-                    (attended)</td>
-                <td>PRJ301-View Materials</br>
-                    at DE-C201</br>
-                    (attended)</td>
-                <td>PRJ301-View Materials</br>
-                    at DE-C201</br>
-                    (attended)</td>
-                <td>PRJ301-View Materials</br>
-                    at DE-C201</br>
-                    (attended)</td>
-                <td>PRJ301-View Materials</br>
-                    at DE-C201</br>
-                    (attended)</td>
-            </tr>
-            <tr>
-                <td>slot 2</td>
-                <td>DBI-View Materials </br>
-                    at DE-C301 </br>
-                    (attended)</td>
-                <td>DBI-View Materials </br>
-                    at DE-C301 </br>
-                    (attended)</td>
-                <td>DBI-View Materials </br>
-                    at DE-C301 </br>
-                    (attended)</td>
-                <td>DBI-View Materials </br>
-                    at DE-C301 </br>
-                    (attended)</td>
-                <td>PRJ301-View Materials</br>
-                    at DE-C201</br>
-                    (attended)</td>
-                <td>>DBI-View Materials </br>
-                    at DE-C301 </br>
-                    (attended)</td>
-                <td>DBI-View Materials </br>
-                    at DE-C301 </br>
-                    (attended)</td>
-            </tr>
-            <tr>
-                <td>slot3</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>slot4</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>slot5</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>slot6</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>slot7</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>slot8</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
+                
+                
+                    <c:forEach items="${requestScope.slots}" var="s">
+                        <tr> 
+                            <td>slot ${s.slotid}</td>
+                            <c:forEach var="i" begin="0" end="6">
+                                <td>
+                                    <c:forEach items="${requestScope.sessions}" var="p">
+                                        <c:if test="${p.slotid eq s.slotid && requestScope.today.plusDays(i) eq p.date}">
+                                            <a style="text-decoration: none"  href="view?gid=${p.getGroup().getId()}&seid=${p.getSessionid()}&gcode=${p.getGroup().getGroup_code()}">${p.getGroup().getGroup_code()}</a> -${p.getSubjectCode()} at ${p.getRoomName()}</br>
+                                            <a style="text-decoration: none"  href="attendance?gid=${p.getGroup().getGroup_code().trim()}&seid=${p.getSessionid()}&lid=${p.lectureid}">Take Attendance</a>
+                                        </c:if>
+                                    </c:forEach>
+                                </td>
+                            </c:forEach>
+                              </tr>  
+                    </c:forEach>                 
+                
+
+               
+
+            
 
         </table>
         </form>

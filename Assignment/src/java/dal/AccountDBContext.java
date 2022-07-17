@@ -17,7 +17,7 @@ public class AccountDBContext extends DBContext<Account>{
     
     public Account getStudentAccount(String username,String password){
         try {
-            String sql="select * from StudentAccount where username=? and password=?";
+            String sql="select * from LectureAccount where username=? and password=?";
             PreparedStatement stm=connection.prepareStatement(sql);
             stm.setString(1, username);
             stm.setString(2,password);

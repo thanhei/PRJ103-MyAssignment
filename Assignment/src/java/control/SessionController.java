@@ -5,15 +5,22 @@
 
 package control;
 
+import dal.LectureDBContext;
+import dal.SessionDBContext;
+import dal.TimeSlotDBContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import model.Account;
+import model.Session;
+import model.TimeSlot;
 import model.Week;
 
 /**
@@ -57,6 +64,20 @@ public class SessionController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session=request.getSession();
+       
+        if(session.getAttribute("account")!=null){
+             SessionDBContext sdb=new SessionDBContext();
+        ArrayList<Session> selist=new ArrayList<>();
+            LectureDBContext ldb=new LectureDBContext();
+           Account acc=(Account)session.getAttribute("account");
+           String username=acc.getUsername();
+        selist=sdb.schedule(ldb.getLecturebyUsername(username).getLectureid());
+        TimeSlotDBContext tbd=new TimeSlotDBContext();
+        ArrayList<TimeSlot> tlist=new ArrayList<>();
+        tlist=tbd.list();
+        
+        
        int year=LocalDate.now().getYear()-1;
        ArrayList<Integer> years=new ArrayList<>();
         for(int i=0;i<=3;i++){
@@ -71,7 +92,7 @@ public class SessionController extends HttpServlet {
        LocalDate startDate= LocalDate.parse("2022-01-03", DateTimeFormatter.ofPattern("yyyy-MM-dd"));            
             ArrayList<Week> weeks=new ArrayList<>();
             request.setAttribute("startdate", startDate);
-            for(int i=0;i<365;i=i+7){
+            for(int i=0;i<363;i=i+7){
                 LocalDate endDate=startDate.plusDays(6);
                 Week week=new Week();
                 week.setStartdate(startDate);
@@ -79,10 +100,27 @@ public class SessionController extends HttpServlet {
                 weeks.add(week);
                 startDate=endDate.plusDays(1);               
             }
+            
+            for (Week week : weeks) {
+                for(int i=0;i<6;i++){
+                    if(week.getStartdate().plusDays(i).equals(today)){
+                        today=week.getStartdate();
+                    } else if(week.getStartdate().plusDays(-i).equals(today)){                      
+                              today=week.getStartdate();
+                         }                   
+                }
+    
+            
+        }
+            request.setAttribute("slots", tlist);
+            request.setAttribute("sessions", selist);
             request.setAttribute("today", today);
     //            request.setAttribute("today2", today2);
             request.setAttribute("weeks", weeks);
         request.getRequestDispatcher("../view/lecture/Schedule.jsp").forward(request, response);
+        } else {
+            response.getWriter().println("acces denided");
+        }
         
         
     } 
@@ -97,6 +135,16 @@ public class SessionController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        HttpSession session=request.getSession();
+         SessionDBContext sdb=new SessionDBContext();
+        ArrayList<Session> selist=new ArrayList<>();
+        LectureDBContext ldb=new LectureDBContext();
+           Account acc=(Account)session.getAttribute("account");
+           String username=acc.getUsername();
+        selist=sdb.schedule(ldb.getLecturebyUsername(username).getLectureid());
+        TimeSlotDBContext tbd=new TimeSlotDBContext();
+        ArrayList<TimeSlot> tlist=new ArrayList<>();
+        tlist=tbd.list();
         int year=LocalDate.now().getYear()-1;
        ArrayList<Integer> years=new ArrayList<>();
         for(int i=0;i<=3;i++){
@@ -112,14 +160,17 @@ public class SessionController extends HttpServlet {
         LocalDate startDate= LocalDate.parse(raw_year+"-01-03", DateTimeFormatter.ofPattern("yyyy-MM-dd"));            
             ArrayList<Week> weeks=new ArrayList<>();
             request.setAttribute("startdate", startDate);
-            for(int i=0;i<365;i=i+7){
+            for(int i=0;i<363;i=i+7){
                 LocalDate endDate=startDate.plusDays(6);
                 Week week=new Week();
                 week.setStartdate(startDate);
                 week.setEndate(endDate);
                 weeks.add(week);
                 startDate=endDate.plusDays(1);               
-            }    
+            } 
+
+             request.setAttribute("slots", tlist);
+            request.setAttribute("sessions", selist);
       request.setAttribute("today", today);
       request.setAttribute("weeks", weeks);
       request.getRequestDispatcher("../view/lecture/Schedule.jsp").forward(request, response);
